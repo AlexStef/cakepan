@@ -33,10 +33,10 @@ var defaults = {
   app_dir: '/app',
 
   //if you want to use plain html files instead of twig, set html_dir to a directory path and set twig_dir to null
-   html_dir: 'src/',
-   twig_dir: null,
-  //html_dir: null,
-  //twig_dir: 'src/twig',
+   //html_dir: 'src/',
+   //twig_dir: null,
+    html_dir: null,
+    twig_dir: 'src/twig',
 
   //less config, `null` to ignore it
   less: {
