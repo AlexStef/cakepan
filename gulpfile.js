@@ -17,7 +17,8 @@ var gulp = require('gulp')
     sourcemaps = require('gulp-sourcemaps')
     deepmerge = require('deepmerge'),
     wiredep = require('wiredep'),
-    replace = require('gulp-replace-task')
+    replace = require('gulp-replace-task'),
+    extend = require('gulp-html-extend')
 ;
 
 var defaults = {
@@ -32,11 +33,10 @@ var defaults = {
   app_dir: '/app',
 
   //if you want to use plain html files instead of twig, set html_dir to a directory path and set twig_dir to null
-  // html_dir: 'src/',
-  // twig_dir: null,
-
-  html_dir: null,
-  twig_dir: 'src/twig',
+   html_dir: 'src/',
+   twig_dir: null,
+  //html_dir: null,
+  //twig_dir: 'src/twig',
 
   //less config, `null` to ignore it
   less: {
@@ -193,6 +193,20 @@ gulp.task('twig', function () {
       .pipe(browserSync.reload({stream:true}));
 });
 
+
+
+gulp.task('extend',['html'], function () {
+
+    if (config.html_dir == null) {
+        return null;
+    }
+
+    return gulp.src(path.join(config.html_dir, '**/[^_]*.html'))
+        .pipe(extend({annotations:true, verbose:false}))
+        .pipe(gulp.dest(config.build_dir))
+        .pipe(browserSync.reload({stream:true}));
+});
+
 gulp.task('dump', function() {
 
   if (config.dump_files == null) {
@@ -283,6 +297,7 @@ gulp.task('browser-sync-refresh', function() {
 gulp.task('start', ['default', 'browser-sync'], function() {
   if (config.html_dir != null) {
     gulp.watch(path.join(config.html_dir, '**/*.html'), ['html']);
+    gulp.watch(path.join(config.html_dir, '**/*.html'), ['extend'])
   }
 
   if (config.twig_dir != null) {
@@ -300,4 +315,4 @@ gulp.task('start', ['default', 'browser-sync'], function() {
   // gulp.watch('gulpfile.js', ['default']);
 });
 
-gulp.task('default', ['clean', 'less', 'html', 'twig', 'dump', 'dumpjs', 'vendor-js', 'js']);
+gulp.task('default', ['clean', 'less', 'html', 'twig', 'dump', 'dumpjs', 'vendor-js', 'js','extend']);
