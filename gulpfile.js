@@ -201,7 +201,7 @@ gulp.task('extend',['html'], function () {
         return null;
     }
 
-    return gulp.src(path.join(config.html_dir, '**/[^_]*.html'))
+    return gulp.src(path.join(config.html_dir, '**/*.html'))
         .pipe(extend({annotations:true, verbose:false}))
         .pipe(gulp.dest(config.build_dir))
         .pipe(browserSync.reload({stream:true}));
@@ -297,7 +297,6 @@ gulp.task('browser-sync-refresh', function() {
 gulp.task('start', ['default', 'browser-sync'], function() {
   if (config.html_dir != null) {
     gulp.watch(path.join(config.html_dir, '**/*.html'), ['html']);
-    gulp.watch(path.join(config.html_dir, '**/*.html'), ['extend'])
   }
 
   if (config.twig_dir != null) {
